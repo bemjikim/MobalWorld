@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "53239051223",
+    "project_id": "mobalworld",
+    "storage_bucket": "mobalworld.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:53239051223:android:a11cc09ff21287986dd192",
+        "android_client_info": {
+          "package_name": "com.example.mobalworld"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "53239051223-ik3r1p2aa5iihobesphcs88gbv0p3rus.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.mobalworld",
+            "certificate_hash": "6bdf3b54a854aa02a6f8dec849d16b1e1afe4214"
+          }
+        },
+        {
+          "client_id": "53239051223-33fqth214kn9t97mi8ranolmfhlls1cq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBB8bN2fhugKeuTZRBNXp81x9FFIkGWqAs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "53239051223-33fqth214kn9t97mi8ranolmfhlls1cq.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "53239051223-aleit5k86ab4n8uoe26e85tv04bup3b9.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.mobal.RunnerTests"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
