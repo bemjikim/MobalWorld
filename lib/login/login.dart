@@ -49,7 +49,6 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<void> _checkUser(String email) async{
-    // Firestore 인스턴스 생성
     final usersRef = await FirebaseFirestore.instance.collection('user');
     QuerySnapshot querySnapshot =
         await usersRef.where('Email', isEqualTo: email).limit(1).get();
