@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
       create: (context) => CurrentUserModel(),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'Namer App',
+        title: 'Namer Apps',
         theme: ThemeData(
           fontFamily: 'gangwon',
           useMaterial3: true,
