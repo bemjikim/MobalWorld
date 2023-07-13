@@ -4,6 +4,7 @@ Mobal Mobal 의 마음의 편지 위로 서비스 !
 
 #방명록 
 >> 혜롱 왔다감 
+>> 정현이도 왔다감
 
 ## Getting Started
 
