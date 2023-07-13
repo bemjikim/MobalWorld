@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
 
     return ChangeNotifierProvider(
-      create: (context) => CurrentUserModel(),
+      create: (context) => Email(),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Namer App',
@@ -37,26 +37,26 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class CurrentUser {
+class EmailUser {
   final String name;
 
-  CurrentUser({
+  EmailUser({
     required this.name,
   });
 }
 
-class CurrentUserModel extends ChangeNotifier {
-  final List<User> _currentUser = [];
+class Email with ChangeNotifier {
+  String _email = "";
 
-  List<User> get currentUsers => _currentUser;
+  String getEmail() => _email;
 
-  void adduser(User name)
-  {
-    _currentUser.add(name);
+  void add(String email) {
+    _email = email;
     notifyListeners();
   }
-  void removeUser(User name) {
-    _currentUser.remove(name);
+
+  void remove() {
+    _email = "";
     notifyListeners();
   }
 }

@@ -17,13 +17,11 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final currentUserProvider = Provider.of<CurrentUserModel>(context);
-    final currentUsers = currentUserProvider.currentUsers;
-    var cn = currentUsers.isNotEmpty ? currentUsers[0] : null;
+    final _email = Provider.of<Email>(context, listen: false).getEmail();
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: Text("Test")
+          title: Text(_email)
         ),
         body: Column(
           children: [

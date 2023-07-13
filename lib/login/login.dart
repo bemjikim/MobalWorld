@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:mobalworld/login/add_google_info.dart';
 import 'package:provider/provider.dart';
 
 import '../home/home.dart';
@@ -18,6 +19,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final GoogleSignIn _googleSignIn = GoogleSignIn();
   final FirebaseAuth anonAuth = FirebaseAuth.instance;
+  late Email emailing;
   Future signInAnon(FirebaseAuth auth) async {
     try {
       await FirebaseAuth.instance.signInAnonymously();
@@ -46,8 +48,67 @@ class _LoginPageState extends State<LoginPage> {
     return null;
   }
 
+  Future<void> _checkUser(String email) async{
+    // Firestore 인스턴스 생성
+    final usersRef = await FirebaseFirestore.instance.collection('user');
+    QuerySnapshot querySnapshot =
+        await usersRef.where('Email', isEqualTo: email).limit(1).get();
+
+    // 쿼리 결과 확인
+    if (querySnapshot.docs.length > 0) {
+      // 동일한 이메일을 가진 문서가 존재하는 경우
+      for (DocumentSnapshot doc in querySnapshot.docs) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  HomePage()
+          ),
+        );
+      }
+    } else {
+      // 일치하는 문서가 없는 경우
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(18.0),
+            ),
+            title: Text(
+              '알림',
+            ),
+            content: Text(
+              '로그인을 위해 추가 정보를 입력해 주세요.',
+            ),
+            actions: [
+              TextButton(
+                child: Text(
+                  '예',
+                ),
+                onPressed: () {
+                  setState(() {
+                    Navigator.pop(context);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              GoogleAdditionalPage()
+                      ),
+                    );
+                  });
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    emailing = Provider.of<Email>(context);
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -62,56 +123,10 @@ class _LoginPageState extends State<LoginPage> {
                   final FirebaseAuth googleAuth = FirebaseAuth.instance;
                   final User? user = await _signInWithGoogle(googleAuth);
                   if (user != null) {
-                    await FirebaseFirestore.instance
-                        .collection('user')
-                        .doc(user.uid)
-                        .set({
-                      'email': user.email,
-                      'name': user.displayName,
-                      'status_message':
-                      '“I promise to take the test honestly before GOD.',
-                      'uid': user.uid,
-                    });
-                    var currentUserProvider = Provider.of<CurrentUserModel>(context, listen: false);
-                    currentUserProvider.adduser(user);
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18.0),
-                          ),
-                          title: Text(
-                            '알림',
-                          ),
-                          content: Text(
-                            '로그인 성공!!',
-                          ),
-
-                          actions: [
-                            TextButton(
-                              child: Text(
-                                '예',
-                              ),
-                              onPressed: () {
-                                setState(() {
-                                  Navigator.pop(context);
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            HomePage()
-                                    ),
-                                  );
-                                });
-                              },
-                            ),
-                          ],
-                        );
-                      },
-                    );
-
-                  } else {
+                    emailing.add(user.email.toString());
+                    _checkUser(user.email.toString());
+                  }
+                  else {
                     showDialog(
                       context: context,
                       builder: (BuildContext context) {
