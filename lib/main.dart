@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -14,13 +16,11 @@ void main() async {
   runApp(MyApp());
 }
 
-
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-
     return ChangeNotifierProvider(
       create: (context) => CurrentUserModel(),
       child: MaterialApp(
@@ -31,7 +31,52 @@ class MyApp extends StatelessWidget {
           useMaterial3: true,
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.black26),
         ),
-        home: LoginPage(),
+        home: LoadingPage(),
+      ),
+    );
+  }
+}
+
+class LoadingPage extends StatelessWidget {
+  const LoadingPage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return const SplashScreen();
+  }
+}
+
+class SplashScreen extends StatefulWidget {
+  const SplashScreen({Key? key}) : super(key: key);
+
+  @override
+  State<SplashScreen> createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen> {
+  @override
+  void initState() {
+    super.initState();
+    Timer(
+        Duration(seconds: 3),
+        () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => LoginPage()),
+            ));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+             Image.asset('assets/images/doosan.jpeg',width: 200,height: 200,alignment: Alignment.center,),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -50,11 +95,11 @@ class CurrentUserModel extends ChangeNotifier {
 
   List<User> get currentUsers => _currentUser;
 
-  void adduser(User name)
-  {
+  void adduser(User name) {
     _currentUser.add(name);
     notifyListeners();
   }
+
   void removeUser(User name) {
     _currentUser.remove(name);
     notifyListeners();
