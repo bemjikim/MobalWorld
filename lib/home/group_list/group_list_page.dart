@@ -20,6 +20,11 @@ class GroupListPage extends StatelessWidget {
               itemBuilder: (context, index) {
                 final DocumentSnapshot documentSnapshot =
                     streamSnapshot.data!.docs[index];
+                final String groupId = documentSnapshot.id;
+                final CollectionReference groupUsersRef = FirebaseFirestore.instance
+                    .collection('groups')
+                    .doc(groupId)
+                    .collection('group_users');
                 return Card(
                   color: Colors.blueAccent,
                   shape: RoundedRectangleBorder(
@@ -38,13 +43,27 @@ class GroupListPage extends StatelessWidget {
                         color: Colors.black,
                       ),
                     ),
-                    //subtitle: Text("참가자 ${documentSnapshot['num'].toString()}명"),
+                    subtitle: StreamBuilder(
+                      stream: groupUsersRef.snapshots(),
+                      builder: (context, AsyncSnapshot<QuerySnapshot> userSnapshot) {
+                        if (userSnapshot.hasData) {
+                          final int userCount = userSnapshot.data!.docs.length;
+                          return Text(
+                            '참가자 $userCount명',
+                            style: const TextStyle(
+                              color: Colors.white,
+                            ),
+                          );
+                        }
+                        return const SizedBox();
+                      },
+                    ),
                     trailing: SizedBox(
                       width: 100,
                       child: Row(
                         children: [
                           // IconButton(
-                          //     //onPressed: onPressed,
+                          //     onPressed: onPressed,
                           //     icon: Icon(Icons.delete),
                           // ),
                         ],

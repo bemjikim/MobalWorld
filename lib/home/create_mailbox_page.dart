@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:random_string/random_string.dart';
-import 'group_list/group_list_page.dart';
+import '../main.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+
+import 'group_list/group_list_page.dart';
 
 
 class CreateMailboxPage extends StatefulWidget {
@@ -19,20 +22,40 @@ class _CreateMailboxPageState extends State<CreateMailboxPage> {
     });
   }
 
-  void _createGroup() {
+  void _createGroup(String groupLeader) {
     FirebaseFirestore.instance.collection('groups').doc(invitationCode).set({
+      'group_leader': groupLeader,
       'group_name': mailboxName,
       // 추가적인 필드들을 필요에 따라 여기에 추가하세요
     })
         .then((value) {
       // 데이터 저장이 성공한 경우의 처리를 여기에 작성하세요
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => GroupListPage(),
-        ),
-      );
       print('Group created successfully!');
+
+      // group_users 컬렉션에 groupLeader 추가
+      FirebaseFirestore.instance
+          .collection('groups')
+          .doc(invitationCode)
+          .collection('group_users')
+          .doc(groupLeader)
+          .set({
+        'user_id': groupLeader,
+        // 추가적인 필드들을 필요에 따라 여기에 추가하세요
+      })
+          .then((value) {
+        // group_users 컬렉션에 groupLeader 추가가 성공한 경우의 처리를 여기에 작성하세요
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => GroupListPage(),
+          ),
+        );
+        print('Group leader added successfully!');
+      })
+          .catchError((error) {
+        // group_users 컬렉션에 groupLeader 추가가 실패한 경우의 처리를 여기에 작성하세요
+        print('Failed to add group leader: $error');
+      });
     })
         .catchError((error) {
       // 데이터 저장이 실패한 경우의 처리를 여기에 작성하세요
@@ -42,6 +65,7 @@ class _CreateMailboxPageState extends State<CreateMailboxPage> {
 
   @override
   Widget build(BuildContext context) {
+    final _email = Provider.of<Email>(context, listen: false).getEmail();
     return Scaffold(
       appBar: AppBar(
         title: Text('Create Mailbox'),
@@ -82,7 +106,7 @@ class _CreateMailboxPageState extends State<CreateMailboxPage> {
             SizedBox(height: 16),
             ElevatedButton(
               onPressed: (){
-                _createGroup();
+                _createGroup(_email);
               },
               child: Text('그룹 생성'),
             ),
