@@ -109,6 +109,20 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     emailing = Provider.of<Email>(context);
+    final _usernameController = TextEditingController();
+    final _passwordController = TextEditingController();
+
+    Future<bool> _handleSubmitted(
+        String uid, String password) async {
+      final querySnapshot = await FirebaseFirestore.instance
+          .collection('user')
+          .where('Userid', isEqualTo: uid)
+          .where('Password', isEqualTo: password)
+          .limit(1)
+          .get();
+
+      return querySnapshot.size == 1;
+    }
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -116,6 +130,129 @@ class _LoginPageState extends State<LoginPage> {
             SizedBox(
               height: 300,
             ),
+
+            Container(
+              height: 54,
+              child: TextField(
+                controller: _usernameController,
+                decoration: InputDecoration(
+                  filled: true,
+                  labelText: 'Username',
+                  labelStyle: TextStyle(
+                    color: Colors.black.withOpacity(0.5),
+                  ),
+                  fillColor: Color(0xFFF4EBE4),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                    borderSide: BorderSide.none,// Set the desired circular radius here
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 6.0),
+            Container(
+              height: 54,
+              child: TextField(
+                controller: _passwordController,
+                decoration: InputDecoration(
+                  filled: true,
+                  labelText: 'Password',
+                  labelStyle: TextStyle(
+                    color: Colors.black.withOpacity(0.5),
+                  ),
+                  fillColor: Color(0xFFF4EBE4),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                    borderSide: BorderSide.none,// Set the desired circular radius here
+                  ),
+                ),
+                obscureText: true,
+              ),
+            ),
+
+            SizedBox(height: 18),
+            ElevatedButton(
+              child: const Text(
+                '로그인',
+                style: TextStyle(
+                  color: Color(0xFF60544B),
+                  fontFamily: 'gangwon',
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              style: ElevatedButton.styleFrom(
+                primary:  Color(0xFFE6DACE),
+                minimumSize: const Size(360, 48),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0), // Set the desired border radius here
+                ),
+
+              ),
+              onPressed: () async {
+                final uid = _usernameController.text;
+                final password = _passwordController.text;
+                final isMatched = await _handleSubmitted(uid, password);
+                if (isMatched) {
+                  emailing.add(uid);
+                  Navigator.push( context, MaterialPageRoute(
+                      builder: (context){
+                        return HomePage();
+                      }
+                  ));
+                } else {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(18.0),
+                        ),
+                        backgroundColor: Color(0xFfF8ECE2),
+                        title: Text('알림',
+                          style: TextStyle(
+                              fontFamily: 'gangwon',
+                              fontWeight: FontWeight.w600,
+                              fontSize: 22,
+                              //color: Color(0xFF746553),
+                              color: Color(0xFF3C3731)
+
+                          ),),
+                        content: Text('아이디 혹은 비밀번호가 잘못 입력된 것 같아요. 다시 입력해 주세요!',
+                          style: TextStyle(
+                              fontFamily: 'gangwon',
+                              fontWeight: FontWeight.w500,
+                              color: Color(0xFF6B5F51),
+                              fontSize: 21
+
+                          ),),
+                        actions: [
+                          TextButton(
+                            child: Text('OK',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                  color: Color(0xFF746553),
+                                  fontSize: 18
+
+                              ),),
+                            onPressed: () {
+                              setState(() {
+                                _passwordController.clear();
+                                _usernameController.clear();
+                                Navigator.pop(context);
+                              });
+                            },
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                }
+              },
+            ),
+
+            SizedBox(height: 20,),
+
             Center(
               child: ElevatedButton(
                 child: Text('Google 계정으로 로그인'),

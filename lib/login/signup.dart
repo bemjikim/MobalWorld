@@ -32,7 +32,7 @@ class _SignUpPageState extends State<SignUpPage> {
 
     await FirebaseFirestore.instance
         .collection('user')
-        .doc(uid)
+        .doc(email)
         .set({
       'Userid': uid,
       'Nickname': nickname,
@@ -471,6 +471,7 @@ class _SignUpPageState extends State<SignUpPage> {
 
                               else
                               {
+                                _handleSubmitted(_usernameController.text, _nicknameController.text, _passwordController.text, _emailController.text)
                                 setState(() {
                                   _signup = true;
                                 });
