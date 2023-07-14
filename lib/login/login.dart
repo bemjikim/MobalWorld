@@ -165,6 +165,8 @@ class _LoginPageState extends State<LoginPage> {
                 Container(
                   height: 54,
                   child: TextField(
+                    onTapOutside: (event) =>
+                        FocusManager.instance.primaryFocus?.unfocus(),
                     controller: _usernameController,
                     decoration: InputDecoration(
                       filled: true,
@@ -184,6 +186,8 @@ class _LoginPageState extends State<LoginPage> {
                 Container(
                   height: 54,
                   child: TextField(
+                    onTapOutside: (event) =>
+                        FocusManager.instance.primaryFocus?.unfocus(),
                     controller: _passwordController,
                     decoration: InputDecoration(
                       filled: true,

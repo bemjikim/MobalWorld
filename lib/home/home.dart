@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:mobalworld/home/group_list/group_attendance_page.dart';
 import 'package:provider/provider.dart';
 
 import '../login/login.dart';
@@ -81,7 +82,12 @@ class _HomePageState extends State<HomePage> {
                       SizedBox(height: 16),
                       ElevatedButton(
                         onPressed: () {
-                          // 참여하기 버튼이 눌렸을 때 수행할 작업
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => GroupAttendPage(),
+                            ),
+                          );
                         },
                         child: Text('참여하기'),
                       ),
