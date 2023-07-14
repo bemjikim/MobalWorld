@@ -40,8 +40,25 @@ class _SignUpPageState extends State<SignUpPage> {
       'Email': email,
     }).then((onValue) {
       //정보 인서트후, 상위페이지로 이동
-      Navigator.pop(context);
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) =>
+              LoginPage(),
+        ),
+      );
     });
+  }
+
+  Future<bool> _checkEmail(
+      String email) async {
+    final querySnapshot = await FirebaseFirestore.instance
+        .collection('user')
+        .where('Email', isEqualTo: email)
+        .limit(1)
+        .get();
+
+    return querySnapshot.size == 1;
   }
 
   Future<bool> _checkuserid(String uid) async{
@@ -443,7 +460,9 @@ class _SignUpPageState extends State<SignUpPage> {
                                 borderRadius: BorderRadius.circular(12), // 버튼의 모서리를 둥글게 설정
                               ),
                             ),
-                            onPressed: () {
+                            onPressed: () async{
+                              final isMatched = await _checkEmail(_emailController.text);
+
                               if(_usernameController.text.length < 1)
                               {
                                 message = "아이디를 입력하지 않았습니다.";
@@ -468,20 +487,17 @@ class _SignUpPageState extends State<SignUpPage> {
                               {
                                 message = "이메일을 입력하지 않았습니다.";
                               }
-
+                              else if(isMatched)
+                              {
+                                message = "이미 등록된 계정입니다!";
+                              }
                               else
                               {
-                                _handleSubmitted(_usernameController.text, _nicknameController.text, _passwordController.text, _emailController.text)
+                                if(_uidinvalid)
+                                _handleSubmitted(_usernameController.text, _nicknameController.text, _passwordController.text, _emailController.text);
                                 setState(() {
                                   _signup = true;
                                 });
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        LoginPage(),
-                                  ),
-                                );
                               }
 
                               if(!_signup)
@@ -538,7 +554,6 @@ class _SignUpPageState extends State<SignUpPage> {
               ),
             ],
           ),
-
         ),
     );
   }
