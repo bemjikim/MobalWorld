@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../create_mailbox_page.dart';
+import 'group_main_page.dart';
+
 class GroupListPage extends StatelessWidget {
   final CollectionReference _groups =
       FirebaseFirestore.instance.collection('groups');
@@ -20,6 +23,11 @@ class GroupListPage extends StatelessWidget {
               itemBuilder: (context, index) {
                 final DocumentSnapshot documentSnapshot =
                     streamSnapshot.data!.docs[index];
+                final String groupId = documentSnapshot.id;
+                final CollectionReference groupUsersRef = FirebaseFirestore.instance
+                    .collection('groups')
+                    .doc(groupId)
+                    .collection('group_users');
                 return Card(
                   color: Colors.blueAccent,
                   shape: RoundedRectangleBorder(
@@ -27,6 +35,17 @@ class GroupListPage extends StatelessWidget {
                   ),
                   margin: const EdgeInsets.all(10),
                   child: ListTile(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => GroupMainPage(
+                            groupId: groupId,
+                            groupName: documentSnapshot['group_name'],
+                          ),
+                        ),
+                      );
+                    },
                     leading: CircleAvatar(
                       radius: 17,
                       backgroundColor: Colors.amber,
@@ -38,15 +57,29 @@ class GroupListPage extends StatelessWidget {
                         color: Colors.black,
                       ),
                     ),
-                    //subtitle: Text("참가자 ${documentSnapshot['num'].toString()}명"),
+                    subtitle: StreamBuilder(
+                      stream: groupUsersRef.snapshots(),
+                      builder: (context, AsyncSnapshot<QuerySnapshot> userSnapshot) {
+                        if (userSnapshot.hasData) {
+                          final int userCount = userSnapshot.data!.docs.length;
+                          return Text(
+                            '참가자 $userCount명',
+                            style: const TextStyle(
+                              color: Colors.white,
+                            ),
+                          );
+                        }
+                        return const SizedBox();
+                      },
+                    ),
                     trailing: SizedBox(
-                      width: 100,
+                      width: 50,
                       child: Row(
                         children: [
-                          // IconButton(
-                          //     //onPressed: onPressed,
-                          //     icon: Icon(Icons.delete),
-                          // ),
+                          IconButton(
+                              onPressed: (){},
+                              icon: Icon(Icons.more_horiz),
+                          ),
                         ],
                       ),
                     ),
@@ -60,7 +93,18 @@ class GroupListPage extends StatelessWidget {
           );
         },
       ),
-      //floatingActionButton: Flo,
+      floatingActionButton: FloatingActionButton(
+        onPressed: (){
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => CreateMailboxPage(),
+            ),
+          );
+        },
+        backgroundColor: Colors.amber,
+        child: Icon(Icons.add),
+      ),
     );
   }
 }
