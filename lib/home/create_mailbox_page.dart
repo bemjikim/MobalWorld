@@ -26,6 +26,7 @@ class _CreateMailboxPageState extends State<CreateMailboxPage> {
     FirebaseFirestore.instance.collection('groups').doc(invitationCode).set({
       'group_leader': groupLeader,
       'group_name': mailboxName,
+      'code' : invitationCode,
       // 추가적인 필드들을 필요에 따라 여기에 추가하세요
     })
         .then((value) {
@@ -39,7 +40,7 @@ class _CreateMailboxPageState extends State<CreateMailboxPage> {
           .collection('group_users')
           .doc(groupLeader)
           .set({
-        'user_id': groupLeader,
+        'Email': groupLeader,
         // 추가적인 필드들을 필요에 따라 여기에 추가하세요
       })
           .then((value) {
