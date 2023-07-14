@@ -135,7 +135,7 @@ class _LoginPageState extends State<LoginPage> {
                             borderRadius: BorderRadius.circular(18.0),
                           ),
                           title: Text(
-                            '알림',
+                            '알림!',
                           ),
                           content: Text(
                             '로그인 실패!',
