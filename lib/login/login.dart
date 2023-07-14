@@ -4,10 +4,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:mobalworld/login/add_google_info.dart';
+import 'package:mobalworld/src/ui/main_loading.dart';
 import 'package:provider/provider.dart';
 
 import '../home/home.dart';
 import '../main.dart';
+import '../src/ui/join_make_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -17,9 +19,14 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  List<String> dropdownOptions = ['home', 'login', 'loading'];
+  late String selectedOption;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
   final FirebaseAuth anonAuth = FirebaseAuth.instance;
   late Email emailing;
+
+  get routeNames => null;
+
   Future signInAnon(FirebaseAuth auth) async {
     try {
       await FirebaseAuth.instance.signInAnonymously();
@@ -35,20 +42,20 @@ class _LoginPageState extends State<LoginPage> {
     final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
     if (googleUser != null) {
       final GoogleSignInAuthentication googleAuth =
-      await googleUser.authentication;
+          await googleUser.authentication;
       final OAuthCredential credential = GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
       );
       final UserCredential userCredential =
-      await auth.signInWithCredential(credential);
+          await auth.signInWithCredential(credential);
       final User? user = userCredential.user;
       return user;
     }
     return null;
   }
 
-  Future<void> _checkUser(String email) async{
+  Future<void> _checkUser(String email) async {
     final usersRef = await FirebaseFirestore.instance.collection('user');
     QuerySnapshot querySnapshot =
         await usersRef.where('Email', isEqualTo: email).limit(1).get();
@@ -59,10 +66,7 @@ class _LoginPageState extends State<LoginPage> {
       for (DocumentSnapshot doc in querySnapshot.docs) {
         Navigator.push(
           context,
-          MaterialPageRoute(
-              builder: (context) =>
-                  HomePage()
-          ),
+          MaterialPageRoute(builder: (context) => HomePage()),
         );
       }
     } else {
@@ -91,9 +95,7 @@ class _LoginPageState extends State<LoginPage> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) =>
-                              GoogleAdditionalPage()
-                      ),
+                          builder: (context) => GoogleAdditionalPage()),
                     );
                   });
                 },
@@ -124,8 +126,7 @@ class _LoginPageState extends State<LoginPage> {
                   if (user != null) {
                     emailing.add(user.email.toString());
                     _checkUser(user.email.toString());
-                  }
-                  else {
+                  } else {
                     showDialog(
                       context: context,
                       builder: (BuildContext context) {
@@ -139,7 +140,6 @@ class _LoginPageState extends State<LoginPage> {
                           content: Text(
                             '로그인 실패!',
                           ),
-
                           actions: [
                             TextButton(
                               child: Text(
@@ -159,6 +159,40 @@ class _LoginPageState extends State<LoginPage> {
                 },
               ),
             ),
+            DropdownButton<String>(
+              hint: Text('페이지 이동'),
+              items: [
+                DropdownMenuItem(
+                  value: 'joinmake',
+                  child: Text('JoinMake'),
+                ),
+                DropdownMenuItem(
+                  value: 'loading',
+                  child: Text(
+                    'loading',
+                  ),
+                ),
+                DropdownMenuItem(
+                  value: 'info',
+                  child: Text(
+                    'add_info',
+                  ),
+                )
+              ],
+              onChanged: (String? value) {
+                if (value == 'joinmake') {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => JoinMakePage()));
+                } else if (value == 'loading') {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => LoadingPage()));
+                }  else if (value == 'info') {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => GoogleAdditionalPage()));
+                }
+              },
+            ),
+
           ],
         ),
       ),
