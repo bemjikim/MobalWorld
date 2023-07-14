@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:mobalworld/login/add_google_info.dart';
+import 'package:mobalworld/login/signup.dart';
 import 'package:provider/provider.dart';
 
 import '../home/home.dart';
@@ -156,6 +157,25 @@ class _LoginPageState extends State<LoginPage> {
                       },
                     );
                   }
+                },
+              ),
+            ),
+
+            SizedBox(
+              height: 10,
+            ),
+
+            Center(
+              child: ElevatedButton(
+                child: Text('회원가입'),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            SignUpPage()
+                    ),
+                  );
                 },
               ),
             ),

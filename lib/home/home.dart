@@ -15,13 +15,27 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
 
+  void signOut() async {
+    await GoogleSignIn().signOut();
+  }
+
   @override
   Widget build(BuildContext context) {
     final _email = Provider.of<Email>(context, listen: false).getEmail();
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: Text(_email)
+          title: Text(_email),
+          leading: Expanded(
+              child: IconButton(
+                icon: Icon(Icons.arrow_back_ios_new,
+                    color: Color(0xFF72614E)),
+                onPressed: () {
+                  signOut();
+                  Navigator.pop(context);
+                },
+              )
+          ),
         ),
         body: Column(
           children: [
