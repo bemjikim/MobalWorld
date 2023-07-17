@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:mobalworld/home/home.dart';
 
-import '../create_mailbox_page.dart';
+import 'create_mailbox_page.dart';
 import 'group_main_page.dart';
 
 class GroupListPage extends StatelessWidget {
@@ -12,6 +13,20 @@ class GroupListPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading:  Expanded(
+            child: IconButton(
+              icon: Icon(Icons.arrow_back_ios_new,
+                  color: Color(0xFF72614E)),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => HomePage(),
+                  ),
+                );
+              },
+            )
+        ),
         title: Text('Group List'),
       ),
       body: StreamBuilder(

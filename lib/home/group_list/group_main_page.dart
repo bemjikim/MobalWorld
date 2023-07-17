@@ -5,6 +5,8 @@ import 'package:mobalworld/home/group_list/screens/notification_page.dart';
 import 'package:mobalworld/home/group_list/screens/profile_page.dart';
 import 'package:mobalworld/home/group_list/screens/write_worry_page.dart';
 
+import 'group_list_page.dart';
+
 class GroupMainPage extends StatefulWidget {
   final String groupId;
   final String groupName;
@@ -28,6 +30,20 @@ class _GroupMainPageState extends State<GroupMainPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading:  Expanded(
+            child: IconButton(
+              icon: Icon(Icons.arrow_back_ios_new,
+                  color: Color(0xFF72614E)),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => GroupListPage(),
+                  ),
+                );
+              },
+            )
+        ),
         title: Text(
           widget.groupName,
           style: TextStyle(

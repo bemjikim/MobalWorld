@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 
 import '../login/login.dart';
 import '../main.dart';
-import 'create_mailbox_page.dart';
+import 'group_list/create_mailbox_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -28,13 +28,19 @@ class _HomePageState extends State<HomePage> {
       child: Scaffold(
         appBar: AppBar(
           title: Text(_email),
-          leading: Expanded(
+
+          //디버그용 임시 로그아웃 버튼
+          leading:  Expanded(
               child: IconButton(
-                icon: Icon(Icons.arrow_back_ios_new,
+                icon: Icon(Icons.logout,
                     color: Color(0xFF72614E)),
                 onPressed: () {
-                  signOut();
-                  Navigator.pop(context);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => LoginPage(),
+                    ),
+                  );
                 },
               )
           ),

@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 
 import '../../main.dart';
 import '../../otp/otp.dart';
+import 'group_main_page.dart';
 
 class GroupAttendPage extends StatefulWidget {
   const GroupAttendPage({Key? key}) : super(key: key);
@@ -68,7 +69,7 @@ class _GroupAttendPageState extends State<GroupAttendPage> {
                       fontSize: 18
 
                   ),),
-                onPressed: () {
+                onPressed: () async {
                   FirebaseFirestore.instance
                       .collection('groups')
                       .doc(code)
@@ -81,7 +82,20 @@ class _GroupAttendPageState extends State<GroupAttendPage> {
                   setState(() {
                     matched = false;
                   });
+                  DocumentSnapshot<Map<String, dynamic>> snapshot =
+                      await FirebaseFirestore.instance.collection('groups').doc(code).get();
+                  String groupName = snapshot.data()?['group_name'];
+
                   Navigator.of(context).pop();
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => GroupMainPage(
+                        groupId: code,
+                        groupName: groupName,
+                      ),
+                    ),
+                  );
                 },
               ),
             ],
@@ -144,7 +158,6 @@ class _GroupAttendPageState extends State<GroupAttendPage> {
             height: 30,
           ),
           // Display the entered OTP code
-          
         ],
       ),
     );

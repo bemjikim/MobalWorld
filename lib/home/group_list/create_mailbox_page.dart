@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:random_string/random_string.dart';
-import '../main.dart';
+import '../../main.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import 'group_list/group_list_page.dart';
+import 'group_list_page.dart';
 
 
 class CreateMailboxPage extends StatefulWidget {
