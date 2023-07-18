@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../main.dart';
-import 'comunity_page.dart';
+
 
 class WriteWorryPage extends StatefulWidget {
   final String groupId; // 그룹코드
@@ -77,7 +77,7 @@ class _WriteWorryPageState extends State<WriteWorryPage> {
                 // 3. 편지를 send_letter 컬렉션에 추가하기 (자동 생성 ID 사용)
                 DocumentReference newLetterRef = await sendLetterCollection.add(letterData);
                 // 4. 자동 생성된 ID 가져오기
-                String documentId = newLetterRef.id;
+                String documentId = _email;
                 // 5. 자동 생성된 ID를 해당 문서의 필드에 추가하기
                 Map<String, dynamic> letterDataWithId = {
                   ...letterData,

@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import 'answer_page.dart';
+
 class ComunityPage extends StatefulWidget {
   final String groupId; //그룹코드
   const ComunityPage({required this.groupId});
@@ -48,11 +50,27 @@ class _ComunityPageState extends State<ComunityPage> {
                           children: letters.map((letter) {
                             final title = letter['title'];
                             final worry = letter['worry'];
-                            final letter_id = letter['id'];
-                            return Card(
-                              child: ListTile(
-                                title: Text(title),
-                                subtitle: Text(worry),
+                            final worry_user = letter['id'];
+                            return GestureDetector(
+                              onTap: () {
+                                // Navigate to the "Answer Page" with necessary data
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => AnswerPage(
+                                      title: title,
+                                      worry: worry,
+                                      letter_id: worry_user,
+                                      groupId: widget.groupId,
+                                    ),
+                                  ),
+                                );
+                              },
+                              child: Card(
+                                child: ListTile(
+                                  title: Text(title),
+                                  subtitle: Text(worry),
+                                ),
                               ),
                             );
                           }).toList(),
