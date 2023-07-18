@@ -5,9 +5,14 @@ import 'package:mobalworld/home/home.dart';
 import 'create_mailbox_page.dart';
 import 'group_main_page.dart';
 
-class GroupListPage extends StatelessWidget {
+class GroupListPage extends StatefulWidget {
+  @override
+  State<GroupListPage> createState() => _GroupListPageState();
+}
+
+class _GroupListPageState extends State<GroupListPage> {
   final CollectionReference _groups =
-      FirebaseFirestore.instance.collection('groups');
+  FirebaseFirestore.instance.collection('groups');
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +42,7 @@ class GroupListPage extends StatelessWidget {
               itemCount: streamSnapshot.data!.docs.length,
               itemBuilder: (context, index) {
                 final DocumentSnapshot documentSnapshot =
-                    streamSnapshot.data!.docs[index];
+                streamSnapshot.data!.docs[index];
                 final String groupId = documentSnapshot.id;
                 final CollectionReference groupUsersRef = FirebaseFirestore.instance
                     .collection('groups')
@@ -92,8 +97,8 @@ class GroupListPage extends StatelessWidget {
                       child: Row(
                         children: [
                           IconButton(
-                              onPressed: (){},
-                              icon: Icon(Icons.more_horiz),
+                            onPressed: (){},
+                            icon: Icon(Icons.more_horiz),
                           ),
                         ],
                       ),
