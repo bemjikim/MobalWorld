@@ -1,15 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobalworld/home/group_list/screens/archive_page.dart';
+import 'package:mobalworld/home/group_list/screens/comunity_page.dart';
 import 'package:mobalworld/home/group_list/screens/notification_page.dart';
 import 'package:mobalworld/home/group_list/screens/profile_page.dart';
 import 'package:mobalworld/home/group_list/screens/write_worry_page.dart';
-
 import 'group_list_page.dart';
 
 class GroupMainPage extends StatefulWidget {
-  final String groupId;
-  final String groupName;
+  final String groupId; //그룹코드
+  final String groupName; //페이지 명
 
   GroupMainPage({required this.groupId, required this.groupName});
 
@@ -50,7 +50,28 @@ class _GroupMainPageState extends State<GroupMainPage> {
             fontWeight: FontWeight.w600
           ),
         ),
-        //elevation: 4,
+        actions: [
+          IconButton(
+              onPressed: (){
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context)=>NotificationPage())
+                );
+              },
+              icon: Icon(Icons.notifications),
+          ),
+          IconButton(
+            onPressed: (){
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context)=>ArchivePage())
+              );
+            },
+            icon: Icon(Icons.archive),
+          ),
+        ],
       ),
       body: Center(
         child: _getPage(_selectedIndex),
@@ -58,12 +79,8 @@ class _GroupMainPageState extends State<GroupMainPage> {
       bottomNavigationBar: BottomNavigationBar(
         items: [
           BottomNavigationBarItem(
-            icon: Icon(Icons.notifications),
-            label: '알림',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.archive),
-            label: '보관함',
+            icon: Icon(Icons.home_filled),
+            label: '그룹 리스트',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.edit),
@@ -85,12 +102,10 @@ class _GroupMainPageState extends State<GroupMainPage> {
   Widget _getPage(int index) {
     switch (index) {
       case 0:
-        return NotificationPage();
+        return ComunityPage(groupId: widget.groupId);
       case 1:
-        return ArchivePage();
+        return WriteWorryPage(groupId: widget.groupId,groupName: widget.groupName);
       case 2:
-        return WriteWorryPage();
-      case 3:
         return ProfilePage();
       default:
         return Container();
