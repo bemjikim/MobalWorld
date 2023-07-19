@@ -1,3 +1,5 @@
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -6,6 +8,7 @@ import 'package:provider/provider.dart';
 
 import '../login/login.dart';
 import '../main.dart';
+import '../notification/notification.dart';
 import 'group_list/create_mailbox_page.dart';
 
 class HomePage extends StatefulWidget {
@@ -21,9 +24,25 @@ class _HomePageState extends State<HomePage> {
     await GoogleSignIn().signOut();
   }
 
+  LocalNotification localNotification = LocalNotification();
+
+  @override
+  void initState() {
+    super.initState();
+    localNotification.requestNotificationPermission();
+    //localNotification.isTokenRefresh();
+    localNotification.getDeviceToken().then((value){
+      print('device token');
+      print(value);
+    });
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
     final _email = Provider.of<Email>(context, listen: false).getEmail();
+    localNotification.firebaseInit(_email);
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -96,6 +115,12 @@ class _HomePageState extends State<HomePage> {
                           );
                         },
                         child: Text('참여하기'),
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          // 만들기 버튼이 눌렸을 때 수행할 작업
+                        },
+                        child: Text('알람테스트'),
                       ),
                     ],
                   ),

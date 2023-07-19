@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:mobalworld/login/add_google_info.dart';
 import 'package:mobalworld/login/signup.dart';
+import 'package:notification_permissions/notification_permissions.dart';
 import 'package:provider/provider.dart';
-
 import '../home/home.dart';
 import '../main.dart';
 
@@ -17,10 +17,21 @@ class LoginPage extends StatefulWidget {
   State<LoginPage> createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginPageState extends State<LoginPage> with WidgetsBindingObserver{
   final GoogleSignIn _googleSignIn = GoogleSignIn();
   final FirebaseAuth anonAuth = FirebaseAuth.instance;
   late Email emailing;
+  late Future<String> permissionStatusFuture;
+
+  var permGranted = "granted";
+  var permDenied = "denied";
+  var permUnknown = "unknown";
+  var permProvisional = "provisional";
+
+
+  /// When the application has a resumed status, check for the permission
+  /// status
+
   Future signInAnon(FirebaseAuth auth) async {
     try {
       await FirebaseAuth.instance.signInAnonymously();
@@ -151,7 +162,6 @@ class _LoginPageState extends State<LoginPage> {
     emailing = Provider.of<Email>(context);
     final _usernameController = TextEditingController();
     final _passwordController = TextEditingController();
-
     return Scaffold(
       body: SafeArea(
         child: ListView(
