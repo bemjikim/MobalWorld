@@ -14,6 +14,30 @@
       },
       "oauth_client": [
         {
+          "client_id": "53239051223-7voqqlfc868bqqmfgf5f9umqf98cg464.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.mobalworld",
+            "certificate_hash": "33a061d2a8282e6ffaadbc18293ecff90baa7da6"
+          }
+        },
+        {
+          "client_id": "53239051223-94i0qiabqhvodb1cv0nfkurmmd1dm2m2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.mobalworld",
+            "certificate_hash": "43b3d74bcd0bfd8a9a4077940c8b0ce1dbd8ebc8"
+          }
+        },
+        {
+          "client_id": "53239051223-f03sr99d887sn3hfaadm8cp7k7sslru3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.mobalworld",
+            "certificate_hash": "9c36ed4265a06eb857a62dd55ca7eaa5887f0d32"
+          }
+        },
+        {
           "client_id": "53239051223-ik3r1p2aa5iihobesphcs88gbv0p3rus.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

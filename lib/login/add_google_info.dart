@@ -68,22 +68,9 @@ class _GoogleAdditionalPageState extends State<GoogleAdditionalPage> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   String _verificationId = '';
   final _formKey = GlobalKey<FormState>();
-  bool _isUserIdExists = false;
   bool _uidinvalid = false;
   bool sending = false;
   bool smscheck = false;
-
-  Future<bool> _checkuserid(String nickname) async{
-    setState(() {
-      FocusScope.of(context).unfocus();
-    });
-    final snapshot = await FirebaseFirestore.instance
-        .collection('user')
-        .where('Nickname', isEqualTo: nickname)
-        .get();
-
-    return snapshot.docs.isNotEmpty;
-  }
 
   Future<void> _registerUser(String email, String nickname, String phonenumber) async{
     final userRef = await FirebaseFirestore.instance.collection('user').doc(email);
@@ -248,122 +235,6 @@ class _GoogleAdditionalPageState extends State<GoogleAdditionalPage> {
                               ),
                             ),
                           ),
-                        ),
-                        SizedBox(width: 20,),
-                        ElevatedButton(
-                          child: const Text(
-                            '중복확인',
-                            style: TextStyle(
-                                fontFamily: 'gangwon',
-                                color: Colors.white,
-                                fontWeight: FontWeight.w600,
-                                fontSize: 20
-                            ),
-                          ),
-                          style: ElevatedButton.styleFrom(
-                            primary: Color(0xFFE6CCAD),
-                            minimumSize: const Size(18, 44),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12), // 버튼의 모서리를 둥글게 설정
-                            ),
-                          ),
-                          onPressed: () async{
-                            if(_nicknameController.text.length > 0)
-                            {
-                              _isUserIdExists = await _checkuserid(_nicknameController.text);
-                              if (_isUserIdExists) {
-                                showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return AlertDialog(
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(18.0),
-                                      ),
-                                      backgroundColor: Color(0xFfF8ECE2),
-                                      title: Text('알림',
-                                        style: TextStyle(
-                                            fontFamily: 'gangwon',
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 24,
-                                            //color: Color(0xFF746553),
-                                            color: Color(0xFF3C3731)
-
-                                        ),),
-                                      content: Text('이미 존재하는 별명입니다.',
-                                        style: TextStyle(
-                                            fontFamily: 'gangwon',
-                                            fontWeight: FontWeight.w500,
-                                            color: Color(0xFF6B5F51),
-                                            fontSize: 21
-
-                                        ),),
-                                      actions: [
-                                        TextButton(
-                                          child: Text('OK',
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.w600,
-                                                color: Color(0xFF746553),
-                                                fontSize: 18
-                                            ),),
-                                          onPressed: () {
-                                            Navigator.of(context).pop();
-                                          },
-                                        ),
-                                      ],
-                                    );
-                                  },
-                                );
-                              }
-                              else
-                              {
-                                showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return AlertDialog(
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(18.0),
-                                      ),
-                                      backgroundColor: Color(0xFfF8ECE2),
-                                      title: Text('알림',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.w600,
-                                            fontFamily: 'gangwon',
-                                            fontSize: 24,
-                                            //color: Color(0xFF746553),
-                                            color: Color(0xFF3C3731)
-
-                                        ),),
-                                      content: Text('사용가능한 별명입니다.',
-                                        style: TextStyle(
-                                            fontFamily: 'gangwon',
-                                            fontWeight: FontWeight.w500,
-                                            color: Color(0xFF6B5F51),
-                                            fontSize: 21
-
-                                        ),),
-                                      actions: [
-                                        TextButton(
-                                          child: Text('OK',
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.w600,
-                                                color: Color(0xFF746553),
-                                                fontSize: 18
-
-                                            ),),
-                                          onPressed: () {
-                                            setState(() {
-                                              _uidinvalid = true;
-                                            });
-                                            Navigator.of(context).pop();
-                                          },
-                                        ),
-                                      ],
-                                    );
-                                  },
-                                );
-                              }
-                            }
-                          },
                         ),
                       ],
                     ),
